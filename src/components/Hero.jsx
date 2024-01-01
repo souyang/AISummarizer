@@ -11,10 +11,10 @@ const Hero = () => {
 
       <h1 className='head_text'>
       Summarize Online Articles with <br className='max-md:hidden' />
-        <span className='light_blue_gradient'>Suzi Summary</span>
+        <span className='light_blue_gradient'>Suzi AI</span>
       </h1>
       <h2 className='desc'>
-      Enhance your reading experience with Suzi, an open-source article summarizer that turns lengthy articles into clear and concise summaries.
+      Enhance your reading experience with Suzi AI, an open-source article summarizer that turns lengthy articles into clear and concise summaries.
       </h2>
     </header>
   );
