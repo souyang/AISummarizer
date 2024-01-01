@@ -6,7 +6,10 @@ const Hero = () => {
   return (
     <header className='w-full flex justify-center items-center flex-col'>
       <nav className='flex justify-between items-center w-full mb-10 pt-3'>
-        <img src={logo} alt='sumz_logo' className='w-28 object-contain' />
+        <div className="flex justify-center items-center">
+        <img src={logo} alt='sumz_logo' className='w-10 h-10 object-contain' />
+        <span className="light_blue_gradient pl-2 text-3xl">Suzi AI</span>
+        </div>
       </nav>
 
       <h1 className='head_text'>
