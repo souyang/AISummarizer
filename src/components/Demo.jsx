@@ -3,15 +3,25 @@ import React, { useState, useEffect } from "react";
 import { copy, linkIcon, loader, tick, deleteIcon } from "../assets";
 import { useFetchSummaryMutation } from "../services/article";
 
-const SentenceRenderer = ({ stringArray, gap }) => {
+/**
+ * Render a list of strings with a specified gap between them.
+ *
+ * @param {Object} props - The component props.
+ * @param {string[]} props.stringArray - The array of strings to render.
+ * @param {number} props.gap - The gap between the rendered strings, in pixels.
+ * @returns {JSX.Element} - The rendered component.
+ */
+const SentenceRenderer = React.memo(({ stringArray, gap }) => {
   return (
+    // Use a flex container to display the strings in a column with the specified gap
     <div style={{ display: 'flex', flexDirection: 'column', gap: `${gap}px` }}>
+      {/* Map over the string array and render each string as a <span> element */}
       {stringArray.map((word, index) => (
         <span key={index}>{word}</span>
       ))}
     </div>
   );
-};
+});
 
 
 const Demo = () => {
