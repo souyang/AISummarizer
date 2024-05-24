@@ -11,6 +11,8 @@
 3. [Features](#features)
 4. [Quick Start](#quick-start)
 
+## <a name="screenshot">Screenshot</a>
+
 ## <a name="introduction">Introduction</a>
 
 Summarize any online articles with using the powerful OpenAI model.
