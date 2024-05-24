@@ -20,7 +20,7 @@ Summarize any online articles with using the powerful OpenAI model.
 
 ## <a name="screenshot">Screenshot</a>
 
-
+![Screenshot](/screenshot.png?raw=true "Optional Title")
 
 ## <a name="tech-stack">Tech Stack</a>
 
