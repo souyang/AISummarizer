@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://suzi-ai.vercel.app/sitemap-index.xml.gz
