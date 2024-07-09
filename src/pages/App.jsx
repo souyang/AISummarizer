@@ -10,7 +10,11 @@ const App = () => {
     <main>
             <Helmet>‍
         <title>{title}</title>‍
-        <meta name="description" content={description} />        
+        <meta name="description" content={description} />  
+        <meta
+          name="keywords"
+          content="Article Summarizer, AI Article Summarizer, Summarize article"
+        />      
         <meta name="twitter:card" content="summary_large_image" />        
         <meta name="twitter:site" content="@souyang" />        
         <meta name="twitter:creator" content="@souyang" />        
