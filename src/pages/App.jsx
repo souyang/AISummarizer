@@ -4,8 +4,8 @@ import { Helmet } from 'react-helmet';
 import "./App.css";
 
 const App = () => {
-  const title = "AI Article Summarizer";
-  const description = "Summarize any kind of online article with just input URL.";
+  const title = "Suzi AI Article Summarizer";
+  const description = "Suzi AI is an open-source article summarizer that turns lengthy articles into clear and concise summaries. Summarize any kind of online article with just input URL.";
   return (
     <main>
             <Helmet>‍
@@ -13,7 +13,7 @@ const App = () => {
         <meta name="description" content={description} />  
         <meta
           name="keywords"
-          content="Article Summarizer, AI Article Summarizer, Summarize article"
+          content="Suzi AI, AI, Article Summarizer, AI Article Summarizer, Summarize article, Summarize online article"
         />      
         <meta name="twitter:card" content="summary_large_image" />        
         <meta name="twitter:site" content="@souyang" />        
