@@ -5,11 +5,13 @@ import { logo } from "../assets";
 const Hero = () => {
   return (
     <header className='w-full flex justify-center items-center flex-col'>
-      <nav className='flex justify-between items-center w-full mb-10 pt-3'>
-        <div className="flex justify-center items-center">
-        <img src={logo} alt='sumz_logo' className='w-10 h-10 object-contain' />
-        <span className="light_blue_gradient pl-2 text-3xl">Suzi AI</span>
-        </div>
+      <nav className='flex justify-between items-center w-full mb-10 sticky top-0'>
+        <a href="/">
+          <div className="flex justify-center items-center">
+          <img src={logo} alt='sumz_logo' className='w-10 h-10 object-contain' />
+          <span className="light_blue_gradient pl-2 text-3xl">Suzi AI</span>
+          </div>
+        </a>
       </nav>
 
       <h1 className='head_text'>

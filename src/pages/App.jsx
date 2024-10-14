@@ -7,7 +7,7 @@ const App = () => {
   const title = "Suzi AI Article Summarizer";
   const description = "Suzi AI is an open-source article summarizer that turns lengthy articles into clear and concise summaries. Summarize any kind of online article with just input URL.";
   return (
-    <main>
+    <main className="max-w-full overflow-x-hidden">
             <Helmet>‍
         <title>{title}</title>‍
         <meta name="description" content={description} />  

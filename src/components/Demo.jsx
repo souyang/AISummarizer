@@ -23,40 +23,86 @@ const SentenceRenderer = React.memo(({ stringArray, gap }) => {
   );
 });
 
+function isValidURL(string) {
+  try {
+    new URL(string);
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
 
 const Demo = () => {
   const [article, setArticle] = useState({
     url: "",
     summary: "",
   });
+  const ERROR_MESSAGE = "Unfortunately, we cannot find the article you are looking for."
   const [allArticles, setAllArticles] = useState([]);
   const [copied, setCopied] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
 
   // RTK lazy query
   const [fetchSummary, { error, isLoading }] = useFetchSummaryMutation();
 
   // Load data from localStorage on mount
   useEffect(() => {
-    const articlesFromLocalStorage = JSON.parse(
-      localStorage.getItem("articles")
-    );
+    const articles = localStorage.getItem("articles");
+    if ( articles) {
+        const articlesFromLocalStorage = JSON.parse(
+          articles
+        );
 
-    if (articlesFromLocalStorage) {
-      setAllArticles(articlesFromLocalStorage);
+        if (articlesFromLocalStorage) {
+          setAllArticles(articlesFromLocalStorage);
+        }
     }
   }, []);
 
+  useEffect(() => {
+    if (error) {
+      setErrorMessage(ERROR_MESSAGE);
+    }
+  }, [error])
+
+  const handleClear = () => {
+    setErrorMessage(null);
+    setArticle({summary: "", url: ""});
+  }
+
+  const handleClearAll = () => {
+    setArticle({summary: "", url: ""});
+    setAllArticles([]);
+    localStorage.removeItem("articles");
+  }
+
+  /**
+   * Handles the submission of a form with a URL as input.
+   * - Checks if the URL is empty and returns early if it is.
+   * - Checks if the URL already exists in the state and if it does, sets the
+   * state to the existing article.
+   * - Calls the fetchSummary mutation with the URL and default values.
+   * - If the mutation is successful, updates the state and localStorage.
+   * - If the mutation fails, returns early.
+   * @param {Event} e The React event for the form submission.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!article.url) return;
+    if(!article.url || !isValidURL(article.url)) {
+      setErrorMessage("Please enter a valid URL");
+      return;
+    }
+    setErrorMessage("");
+    const url = article.url;
     const existingArticle = allArticles.find(
-      (item) => item.url === article.url
+      (item) => item.url === url
     );
-
+   
     if (existingArticle) return setArticle(existingArticle);
 
-    const { data } = await fetchSummary({ url: article.url, text: "", sentnum: 5});
-    if (data?.sentences) {
+    const { data } = await fetchSummary({ url, text: "", sentnum: 5});
+    
+    if (data?.sentences && data.sentences.length > 1) {
       const newArticle = { ...article, summary: data.sentences };
       const updatedAllArticles = [newArticle, ...allArticles];
 
@@ -64,6 +110,8 @@ const Demo = () => {
       setArticle(newArticle);
       setAllArticles(updatedAllArticles);
       localStorage.setItem("articles", JSON.stringify(updatedAllArticles));
+    } else {
+      setErrorMessage("Article was blocked or not found by the website.");
     }
   };
 
@@ -86,7 +134,6 @@ const Demo = () => {
     if (e.keyCode === 13) {
       handleSubmit(e);
     }
-
   };
 
   return (
@@ -94,9 +141,9 @@ const Demo = () => {
       {/* Search */}
       <div className='flex flex-col w-full gap-2'>
         <form
-          className='relative flex justify-center items-center'
-          onSubmit={handleSubmit}
+          className='relative flex flex-col'
         >
+          <div className='relative flex justify-center items-center mx-auto w-4/5 md:w-full'>
           <img
             src={linkIcon}
             alt='link-icon'
@@ -112,12 +159,23 @@ const Demo = () => {
             required
             className='url_input peer' // When you need to style an element based on the state of a sibling element, mark the sibling with the peer class, and use peer-* modifiers to style the target element
           />
-          <button
-            type='submit'
-            className='submit_btn peer-focus:border-gray-700 peer-focus:text-gray-700 '
+          {article?.url.length !== 0 && (<button
+            type='button'
+            onClick={handleClear}
+            className='clear_btn peer-focus:border-gray-700 peer-focus:text-gray-700 '
           >
-            <p>↵</p>
+            <p>x</p>
+          </button>)}
+          </div>
+          <div className="flex justify-center items-center mt-12 md:mt-10">
+          <button type="button"  className={`hover:border-blue-700 border-2 border-blue-500 py-2 px-5 font-satoshi font-medium text-lg text-white bg-blue-500 rounded-xl ml-10`} onClick={handleSubmit}>
+            Get Summary
           </button>
+          <button type="button" className="hover:border-gray-300
+          active:border-blue-500 py-2 px-5 ml-5 font-satoshi font-medium text-lg  text-blue-500 border-gray-100 border-2 bg-gray-200 rounded-xl" disabled={article?.url.length === 0} onClick={handleClearAll}>
+            Clear History
+          </button>
+          </div>
         </form>
         {/* Browse History */}
         {allArticles?.length > 0 &&<div className="pt-5">
@@ -153,24 +211,22 @@ const Demo = () => {
       <div className='my-10 max-w-full flex justify-center items-center'>
         {isLoading ? (
           <img src={loader} alt='loader' className='w-20 h-20 object-contain' />
-        ) : error ? (
-          <p className='font-inter font-bold text-black text-center'>
-            Well, that wasn't supposed to happen...
-            <br />
-            <span className='font-satoshi font-normal text-gray-700'>
-              {error?.data?.error}
-            </span>
+        ) : errorMessage ? (
+          <p className='font-inter font-bold text-red-500 text-center'>
+           {errorMessage}
           </p>
         ) : (
           article.summary && Array.isArray(article.summary) && (
-            <div className='flex flex-col gap-3'>
+            <div>
               <h2 className='font-satoshi font-bold text-gray-600 text-xl'>
-                <span className='blue_gradient'>Article Summary</span>
+              <span className='blue_gradient'>Article Summary</span>
               </h2>
-              <div className='summary_box'>
-                <p className='font-inter font-medium text-sm text-gray-700'>
-                   <SentenceRenderer stringArray={article.summary} gap={10} />
-                </p>
+              <div className='flex flex-col gap-3'>
+                <div className='summary_box'>
+                  <p className='font-inter font-medium text-sm text-gray-700'>
+                    <SentenceRenderer stringArray={article.summary} gap={10} />
+                  </p>
+                </div>
               </div>
             </div>
           )
