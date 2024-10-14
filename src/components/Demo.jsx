@@ -66,13 +66,14 @@ const Demo = () => {
   }, [error])
 
   const handleClear = () => {
-    setErrorMessage(null);
+    setErrorMessage("");
     setArticle({summary: "", url: ""});
   }
 
   const handleClearAll = () => {
     setArticle({summary: "", url: ""});
     setAllArticles([]);
+    setErrorMessage("");
     localStorage.removeItem("articles");
   }
 
@@ -168,11 +169,11 @@ const Demo = () => {
           </button>)}
           </div>
           <div className="flex justify-center items-center mt-12 md:mt-10">
-          <button type="button"  className={`hover:border-blue-700 border-2 border-blue-500 py-2 px-5 font-satoshi font-medium text-lg text-white bg-blue-500 rounded-xl ml-10`} onClick={handleSubmit}>
+          <button type="button"  className={`hover:border-blue-700 border-2 border-blue-500 py-2 px-5 font-satoshi font-medium text-lg text-white bg-blue-500 rounded-xl ml-10 cursor-pointer`} onClick={handleSubmit}>
             Get Summary
           </button>
           <button type="button" className="hover:border-gray-300
-          active:border-blue-500 py-2 px-5 ml-5 font-satoshi font-medium text-lg  text-blue-500 border-gray-100 border-2 bg-gray-200 rounded-xl" disabled={article?.url.length === 0} onClick={handleClearAll}>
+          active:border-blue-500 py-2 px-5 ml-5 font-satoshi font-medium text-lg  text-blue-500 border-gray-100 border-2 bg-gray-200 rounded-xl cursor-pointer" disabled={article?.url.length === 0} onClick={handleClearAll}>
             Clear History
           </button>
           </div>
@@ -188,7 +189,7 @@ const Demo = () => {
             <div
               key={`link-${index}`}
               onClick={() => setArticle(item)}
-              className='link_card'
+              className='link_card cursor-pointer'
             >
               <div className='copy_btn' onClick={() => handleCopy(item.url)}>
                 <img
@@ -218,11 +219,18 @@ const Demo = () => {
         ) : (
           article.summary && Array.isArray(article.summary) && (
             <div>
-              <h2 className='font-satoshi font-bold text-gray-600 text-xl'>
+              <h2 className='font-satoshi font-bold text-gray-600 text-xl mb-3'>
               <span className='blue_gradient'>Article Summary</span>
               </h2>
               <div className='flex flex-col gap-3'>
                 <div className='summary_box'>
+                  <div className='copy_btn mb-2 ml-auto' onClick={() => handleCopy(article.summary)}>
+                  <img
+                    src={copied === article.summary ? tick : copy}
+                    alt={copied === article.summary ? "tick_icon" : "copy_icon"}
+                    className='w-[40%] h-[40%] object-contain'
+                  />
+                </div>
                   <p className='font-inter font-medium text-sm text-gray-700'>
                     <SentenceRenderer stringArray={article.summary} gap={10} />
                   </p>
