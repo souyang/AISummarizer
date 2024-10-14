@@ -150,9 +150,11 @@ const Demo = () => {
             alt='link-icon'
             className='absolute left-0 my-2 ml-3 w-5'
           />
-
+          <label htmlFor="article-url" className="sr-only">Article URL</label>
           <input
             type='url'
+            id="article-url"
+            aria-describedby="url-description"
             placeholder='Paste the article online link'
             value={article?.url}
             onChange={(e) => setArticle({ ...article, url: e.target.value })}
@@ -162,6 +164,7 @@ const Demo = () => {
           />
           {article?.url.length !== 0 && (<button
             type='button'
+            aria-label="Clear the input field" 
             onClick={handleClear}
             className='clear_btn peer-focus:border-gray-700 peer-focus:text-gray-700 '
           >
@@ -169,10 +172,14 @@ const Demo = () => {
           </button>)}
           </div>
           <div className="flex justify-center items-center mt-12 md:mt-10">
-          <button type="button"  className={`hover:border-blue-700 border-2 border-blue-500 py-2 px-5 font-satoshi font-medium text-lg text-white bg-blue-500 rounded-xl ml-10 cursor-pointer`} onClick={handleSubmit}>
+          <button type="button"  
+           aria-label="Get Summary" 
+          className={`hover:border-blue-700 border-2 border-blue-500 py-2 px-5 font-satoshi font-medium text-lg text-white bg-blue-500 rounded-xl ml-10 cursor-pointer`} onClick={handleSubmit}>
             Get Summary
           </button>
-          <button type="button" className="hover:border-gray-300
+          <button type="button" 
+           aria-label="Clear All History" 
+          className="hover:border-gray-300
           active:border-blue-500 py-2 px-5 ml-5 font-satoshi font-medium text-lg  text-blue-500 border-gray-100 border-2 bg-gray-200 rounded-xl cursor-pointer" disabled={article?.url.length === 0} onClick={handleClearAll}>
             Clear History
           </button>
@@ -188,7 +195,10 @@ const Demo = () => {
           {allArticles.reverse().map((item, index) => (
             <div
               key={`link-${index}`}
+              tabIndex="0"
+              role="button"
               onClick={() => setArticle(item)}
+              onKeyPress={(e) => e.key === "Enter" && setArticle(item)}
               className='link_card cursor-pointer'
             >
               <div className='copy_btn' onClick={() => handleCopy(item.url)}>
@@ -213,7 +223,10 @@ const Demo = () => {
         {isLoading ? (
           <img src={loader} alt='loader' className='w-20 h-20 object-contain' />
         ) : errorMessage ? (
-          <p className='font-inter font-bold text-red-500 text-center'>
+          <p 
+            role="alert"
+            className='font-inter font-bold text-red-500 text-center'
+          >
            {errorMessage}
           </p>
         ) : (
